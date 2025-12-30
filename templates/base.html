@@ -1,0 +1,218 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>{% block title %} {% endblock title %}</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+  <style>
+    .button {
+      background-color: #04AA6D;
+      /* Green */
+      border: none;
+      color: white;
+      padding: 16px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      transition-duration: 0.4s;
+      cursor: pointer;
+    }
+
+    .btn btn-outline-danger {
+      background-color: white;
+      color: black;
+      border: 2px solid #b80505;
+    }
+
+    .LogOut:hover {
+      background-color: #c5052e;
+      color: white;
+    }
+
+    .img {
+      border-radius: 50%;
+    }
+
+    .logo img{
+      position:absolute;
+      margin-top:1px;
+      margin-left:1px;
+      }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'Home:Home'%}"><font-family: Papirus , Courier New><b>MERO LIBRARY</b></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'Home:Home' %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'Home:Authors' %}">Authors</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Categories
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'Home:categories' key='Poem' %}">Poem</a></li>
+              <li><a class="dropdown-item" href="{% url 'Home:categories' key='Story' %}">Story</a></li>
+              <li><a class="dropdown-item" href="{% url 'Home:categories' key='Artical' %}">Article</a></li>
+              <li><a class="dropdown-item" href="{% url 'Home:categories' key='Reports' %}">Reports</a></li>
+              <li><a class="dropdown-item" href="{% url 'Home:categories' key='Others' %}">Others</a></li>
+
+          </li>
+        </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'Home:About' %}">About</a>
+        <li class="nav-item">
+          <a class="nav-link disabled" aria-disabled="true"></a>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#upload_popup">
+            Upload
+          </button>
+
+          <!-- Modal -->
+          <div class="modal fade" id="upload_popup" tabindex="-1" role="dialog" aria-labelledby="upload_modal"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Book Upload Form</h5>
+                </div>
+                <div class="modal-body">
+                  <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <table>
+                      {{book_form}}
+                    </table>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-outline-dark">Upload</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </li>
+        {% endif %}
+        <li class="nav-item">
+          {%if messages%}
+          {%for message in messages%}
+
+          <div class="" id="message">
+            <p
+              class="text-center blockquote {% if 'success' in message.level_tag %} text-success  {% else %} text-danger {% endif %}">
+              {{ message }}
+            </p>
+
+          </div>
+
+          {%endfor%}
+          {%endif%}
+        </li>
+        </ul>
+
+
+
+        {% if user.is_authenticated %}
+        
+        <input class="form-control-sm" type="text" id="key" placeholder="Search">
+        <button class="btn btn-outline-light" onclick="search()">Search</button>
+
+      </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      
+      
+      <a href="{% url 'profile' %}" class="btn btn-outline-info">Profile</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="{% url 'logout' %}" class="btn btn-outline-danger">Log Out</a>
+      {% endif %}
+    </div>
+  </nav>
+
+
+  <div class="" style="min-height: 90vh;">
+    {% block body %} {% endblock body %}
+  </div>
+
+
+  <div class="container-fluid bg-dark py-2 text-light" style="position: absolute; ">
+    <div class="row">
+      <div class="col-md-4">
+        <span class="h3 border-bottom">Contact Us</span><br>
+        <span class="lead">Tel: 977-021-123XXX</span><br>
+        <span class="lead">Address: Biratnagar, Morang, Nepal</span><br>
+        <span class="lead">Email: contact@ml.com</span><br>
+        <span class="lead">Post Box No.: 312XXX</span>
+      </div>
+      <div class="col-md-4">
+        <span class="h3 border-bottom">Our Mission</span><br>
+        <span class="lead"> Mero Library is a digital platform that allows users to access 
+          a wide range of books, publications, educational materials, and resources through the internet. 
+          It serves as a virtual library providing various functionalities similar to a traditional physical library, 
+          but with the advantage of digital access and flexibility.</span>
+      </div>
+      <div class="col-md-4">
+        <span class="h3 border-bottom">Quick Links</span><br>
+        <span class="lead">Poems</span><br>
+        <span class="lead">Stories</span><br>
+        <span class="lead">Articles</span><br>
+        <span class="lead">Reports</span><br>
+      </div>
+    </div>
+    <br><div class="row py-1">
+      <p class="text-center">
+        <span class="text-light bg-secondary"> Copyright &copy; </span><span class="text-secondary bg-light"> MeroLibrary_productions </span>
+      </p>
+      
+    </div>
+  </div>
+
+  <script>
+    setTimeout(() => {
+      document.getElementById("message").textContent = null;
+    }, 3000
+    )
+
+    search = () => {
+      var key = document.getElementById('key').value;
+      window.location.href = "{% url 'Home:categories' key=1234 %}".replace(/1234/, key.toString());
+    }
+
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+    integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %} Login {% endblock title %}
+
+{% block body %}
+<center>
+<div class="card border-primary my-5" style="max-width: 30rem;">
+<B><Marquee>&#128071; LOGIN HERE &#128071;</Marquee></B> 
+    <form class="my-3 text-center" method="POST">
+        {% csrf_token %}
+        <div class="form-group alert alert-success">
+            <label for="username">User Name</label>
+            <input type="text" class="form-control" name="uname" id="username" aria-describedby="username"
+                placeholder="Enter username">
+        </div><br>
+        <div class="form-group alert alert-success">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" name="passwd" id="password" placeholder="Password">
+        </div><br>
+
+        <button type="submit" class="btn btn-outline-dark">Submit</button>
+    </form><br>
+    <p class="text-center">
+        <a href="{% url 'register' %}" class="text-decoration-none">Don't have an account?</a>
+    </p>
+
+</div>
+</center>
+{% endblock body %}

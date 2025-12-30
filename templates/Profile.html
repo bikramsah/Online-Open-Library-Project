@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}User Profile {% endblock title %}
+
+{% block body %}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .profile-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        img.profile-pic {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            margin-bottom: 20px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        p {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        strong {
+            font-weight: bold;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            display: block;
+            width: 100%;
+        }
+
+        .follow-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .message-btn {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Profile</h1>
+
+    <div class="profile-card">
+        <img class="profile-pic" src="https://via.placeholder.com/150" alt="Profile Picture">
+      <center>  <p><strong>Hello! </strong> {{ user.username }}</p>
+        <p><strong></strong> {{ user.email }}</p></center>
+        
+        <p><br></p>
+        
+       
+       
+         <!--<button class="btn message-btn">Message</button> -->
+    </div>
+    <button class="btn follow-btn">Your Uploads</button>
+    <div class="container py-3" >
+        <div class="row" >
+            {% for book in books %}
+            <div class="col-4 ">
+                <div class="card shadow" style="width: 18rem; ">
+                    <img class="card-img-top" src="{{book.book_icon.url}}" alt="Image" style="height:15rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ book.book_name }}</h5>
+                        <p class="card-text">{{ book.book_description }}</p>
+                        <a href="{{book.book_file.url}}" target="_blank" class="btn btn-dark">Read</a>
+                        <span class="text-secondary">{{book.genre}}</span>
+                        <span class="btn text-danger" onclick="dele({{book.id}})"> Delete</span>
+                    </div>
+                </div>
+                
+            </div>
+            <br>
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        dele = (id) => {
+            if(confirm("Do you want to proceed?")){
+                window.location.href = "{% url 'Home:delete' id=1234 %}".replace(/1234/, id.toString());
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+{% endblock body %}

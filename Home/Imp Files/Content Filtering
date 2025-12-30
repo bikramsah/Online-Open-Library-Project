@@ -1,0 +1,18 @@
+{% comment %} <a href="{{book.book_file.url}}" target="_blank" class="btn btn-dark"> {% endcomment %}
+                    <span onclick="reco('{{book.author}}', '{{book.book_file}}')">
+
+                            Read
+                </span>
+
+                    {% comment %} </a> {% endcomment %}
+
+                    <span class="text-secondary">{{book.genre}}</span>
+<script>
+    reco = (key, book) => {
+        full_url = "http://127.0.0.1:8000/"+book;
+        
+        window.open(full_url)
+        window.location.href = "{% url 'Home:reco' key=1234 %}".replace(/1234/, key.toString());
+        
+    }
+</script>

@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock title %}
+
+{% block body %}
+
+<div class="container py-3" >
+    <div class="row" >
+        {% for book in books %}
+        <div class="col-4 py-3">
+            <div class="card shadow" style="width: 18rem; ">
+                <img class="card-img-top" src="{{book.book_icon.url}}" alt="Image" style="height:15rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ book.book_name }}</h5>
+                    <p class="card-text">{{ book.book_description }}</p>
+
+                    {% comment %} <a href="{{book.book_file.url}}" target="_blank" class="btn btn-dark"> {% endcomment %}
+                    <span onclick="reco('{{book.author}}', '{{book.book_file}}')">
+
+                        <button>  <b>  Read </b> </button>
+                </span>
+
+                    {% comment %} </a> {% endcomment %}
+
+                    <span class="text-secondary">{{book.genre}}</span>
+                </div>
+            </div>
+        </div><br>
+        {% endfor %}
+    </div>
+</div>
+<hr>
+<span class="lead">
+ <center><h2>  Recomended Materials</h2></center>
+</span>
+<div class="container py-3" >
+    <div class="row" >
+        {% for book in r_books %}
+        <div class="col-4 py-1">
+            <div class="card shadow" style="width: 18rem; ">
+                <img class="card-img-top" src="{{book.book_icon.url}}" alt="Image" style="height:15rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ book.book_name }}</h5>
+                    <p class="card-text">{{ book.book_description }}</p>
+                    <a href="{{book.book_file.url}}" target="_blank" class="btn btn-dark">
+                        
+                            Read
+                        
+                    </a>
+                    <span class="text-secondary">{{book.genre}}</span>
+                </div>
+            </div>
+        </div><br>
+        {% endfor %}
+    </div>
+</div>
+
+
+<script>
+    reco = (key, book) => {
+        full_url = "http://127.0.0.1:8000/"+book;
+        
+        window.open(full_url)
+        window.location.href = "{% url 'Home:reco' key=1234 %}".replace(/1234/, key.toString());
+        
+    }
+</script>
+
+{% endblock body %}
